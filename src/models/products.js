@@ -136,3 +136,8 @@ exports.getCount = (cb) => {
   SELECT COUNT(products.id) AS count FROM products WHERE products.name LIKE '%%'
   `, cb)
 }
+exports.getProductsById = (id, cb) => {
+  db.query(`
+  SELECT id, name, price FROM products WHERE id IN (?)
+  `, [id], cb)
+}

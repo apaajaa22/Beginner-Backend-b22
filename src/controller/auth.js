@@ -3,11 +3,15 @@ const { createUsers, getUserByEmail } = require('../models/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { APP_KEY } = process.env
+const { validationResult } = require('express-validator')
 
 exports.register = async (req, res) => {
+  const err = validationResult(req)
   const data = req.body
+  if (!err.isEmpty()) {
+    return response(res, err.array()[0].msg, null, 400)
+  }
   data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
-
   createUsers(data, (err, results) => {
     if (!err) {
       if (results.affectedRows) {
@@ -23,6 +27,10 @@ exports.register = async (req, res) => {
 
 exports.login = (req, res) => {
   const { email, password } = req.body
+  const err = validationResult(req)
+  if (!err.isEmpty()) {
+    return response(res, err.array()[0].msg, null, 400)
+  }
   getUserByEmail(email, async (err, results) => {
     if (!err) {
       if (results.length < 1) {

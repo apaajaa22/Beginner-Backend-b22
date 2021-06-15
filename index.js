@@ -20,12 +20,13 @@ app.get('/', (req, res) => {
 const routeProduct = require('./src/routes/products')
 const routeCategory = require('./src/routes/categories')
 const routeVariant = require('./src/routes/variants')
-// const routeUser = require('./src/routes/users')
+const routeProfile = require('./src/routes/profile')
 const routeAuth = require('./src/routes/auth')
 
 app.use('/products', routeProduct)
 app.use('/categories', routeCategory)
 app.use('/variants', routeVariant)
+app.use('/private', routeProfile)
 app.use('/auth', routeAuth)
 
 app.listen(APP_PORT, () => {

@@ -71,12 +71,11 @@ exports.getTransactionByIdOn = (req, res) => {
   getTransactionByIdOn(id, (err, results) => {
     if (results < 1) {
       response(res, 'History not found', null, 404)
+    }
+    if (!err) {
+      response(res, 'History Transaction', results, 200)
     } else {
-      if (!err) {
-        response(res, 'History Transaction', results, 200)
-      } else {
-        response(res, 'History not found', null, 404)
-      }
+      response(res, 'History not found', null, 404)
     }
   })
 }

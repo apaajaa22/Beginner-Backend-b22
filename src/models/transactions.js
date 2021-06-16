@@ -20,6 +20,6 @@ exports.getTransactionByIdOn = (id, cb) => {
 }
 exports.getTransactionDetail = (id, cb) => {
   db.query(`
-  SELECT id, code, total, tax, shipping_cost, shipping_address, payment_method FROM transactions
-  WHERE id = ?`, [id], cb)
+  SELECT product_transactions.id_transaction, name, price, amount FROM product_transactions
+WHERE product_transactions.id_transaction = ?`, [id], cb)
 }

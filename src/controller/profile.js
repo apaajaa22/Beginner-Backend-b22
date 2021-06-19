@@ -59,9 +59,9 @@ exports.updateProfile = (req, res) => {
   getProfile(req.authUser.id, (err, results, _fields) => {
     if (!err) {
       if (results.length > 0) {
-        const { role, name, address, phoneNumber } = req.body
-        const updateData = { role, name, address, phone_number: phoneNumber }
-        updateProfile(updateData, req.authUser.id, (err, results, _fields) => {
+        const data = req.body
+
+        updateProfile(data, req.authUser.id, (err, results, _fields) => {
           if (!err) {
             return response(res, 'Profile updated successfully', null, 200)
           } else {

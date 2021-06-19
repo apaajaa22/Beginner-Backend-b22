@@ -82,11 +82,16 @@ exports.getTransactionByIdOn = (req, res) => {
 
 exports.getTransactionDetail = (req, res) => {
   const { id } = req.params
-  getTransactionDetail(id, (err, results) => {
-    if (!err) {
-      response(res, 'History Detail', results, 200)
-    } else {
-      response(res, 'History not found', null, 404)
-    }
+  const { id: user } = req.authUser
+  getTransactionByIdOn(user, (err, dataInvoice) => {
+    if (err) throw err
+    getTransactionDetail(id, (err, results) => {
+      const invoice = dataInvoice
+      if (!err) {
+        response(res, 'History Detail', results, 200, undefined, invoice)
+      } else {
+        response(res, 'History not found', null, 404)
+      }
+    })
   })
 }

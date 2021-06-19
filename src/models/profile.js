@@ -13,8 +13,8 @@ exports.getProfile = (id, cb) => {
 }
 exports.updateProfile = (data, id, cb) => {
   db.query(`
-  UPDATE ${table} SET role=?, name=?, address=?, phone_number=? WHERE id=?
-  `, [data.role, data.name, data.address, data.phone_number, id], cb)
+  UPDATE ${table} SET  name=?, address=?, phone_number=? WHERE id=?
+  `, [data.name, data.address, data.phone_number, id], cb)
 }
 exports.changeProfilePassword = (data, id, cb) => {
   db.query(`

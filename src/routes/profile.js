@@ -12,5 +12,5 @@ route.delete('/profile', auth, profileController.deleteProfile)
 
 route.post('/transactions', auth, createTransaction)
 route.get('/transactions', auth, getTransactionByIdOn)
-route.get('/transactions/:id', getTransactionDetail)
+route.get('/transactions/:id', auth, getTransactionDetail)
 module.exports = route

@@ -1,8 +1,9 @@
-exports.response = (res, message, results, status = 200, pageInfo) => {
+exports.response = (res, message, results, status = 200, pageInfo, invoice) => {
   const returnData = {
     success: true,
     message,
-    pageInfo
+    pageInfo,
+    invoice
   }
   if (status >= 400) {
     returnData.success = false

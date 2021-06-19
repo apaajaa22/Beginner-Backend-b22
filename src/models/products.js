@@ -116,7 +116,7 @@ ORDER BY products.${column} ${order} LIMIT ? OFFSET ?`, [data.limit, data.offset
 exports.updateProduct = (data, cb) => {
   db.query(`
   UPDATE products SET products.picture=?, products.name=? ,products.price=?, products.updated_at=? WHERE products.id=?
-  `, [data.products.picture, data.name, data.price, data.updated_at, data.id], cb)
+  `, [data.picture, data.name, data.price, data.updated_at, data.id], cb)
 }
 
 exports.updateProductPartial = (data, cb) => {

@@ -25,7 +25,7 @@ exports.createCategory = async (req, res) => {
 }
 exports.getCategories = (req, res) => {
   const data = req.query
-  data.limit = parseInt(data.limit) || 2
+  data.limit = parseInt(data.limit) || 12
   data.offset = parseInt(data.offset) || 0
   data.page = parseInt(data.page) || 1
   data.offset = (data.page * data.limit) - data.limit
@@ -55,7 +55,7 @@ exports.getCategories = (req, res) => {
 
 exports.getProductsByCategory = (req, res) => {
   const data = req.query
-  data.limit = parseInt(data.limit) || 2
+  data.limit = parseInt(data.limit) || 12
   data.offset = parseInt(data.offset) || 0
   data.page = parseInt(data.page) || 1
   data.offset = (data.page * data.limit) - data.limit
@@ -83,7 +83,7 @@ exports.getProductsByCategory = (req, res) => {
 exports.updateCategoryPartial = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)
-  console.log('ini role :', userRole[0].role)
+
   if (userRole[0].role === 'Admin') {
     categoryModel.getCategoryById(id, (err, results, _fields) => {
       if (!err) {
@@ -115,7 +115,7 @@ exports.updateCategoryPartial = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)
-  console.log('ini role :', userRole[0].role)
+
   if (userRole[0].role === 'Admin') {
     categoryModel.getCategoryById(id, (err, results, _fields) => {
       if (!err) {
@@ -142,7 +142,7 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)
-  console.log('ini role :', userRole[0].role)
+
   if (userRole[0].role === 'Admin') {
     categoryModel.getCategoryById(id, (err, results, _fields) => {
       if (!err) {

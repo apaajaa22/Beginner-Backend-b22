@@ -26,37 +26,46 @@ exports.getProducts = (data, cb) => {
   SELECT products.id, products.name, products.picture,  categories.name AS category_name, products.price, products.description, products.quantity, products.delivery_on FROM products
   LEFT JOIN categories ON products.id_category = categories.id
   LIMIT ? OFFSET ?
-  `, [data.limit, data.offset],
+  `,
+    [data.limit, data.offset],
     cb
   )
 }
 
 exports.getProductById = (id, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT products.id, products.name, products.picture, products.description, products.price, products.quantity, categories.name AS category_name ,products.created_at, products.updated_at
   FROM products LEFT JOIN categories ON products.id_category = categories.id
   WHERE products.id = ?
-  `, [id], cb)
+  `,
+    [id],
+    cb
+  )
 }
 
 exports.updateProductPartial = (data, cb) => {
   const key = Object.keys(data)
   const lastColumn = key[key.length - 1]
   db.query(`
-  UPDATE products SET ${lastColumn} = ?, updated_at=? WHERE id=?
-  `, [data[lastColumn], data.updated_at, data.id], cb)
+  UPDATE products SET ${lastColumn} = ? WHERE id=?
+  `, [data[lastColumn], data.id], cb)
 }
 
 exports.deleteProduct = (id, cb) => {
-  db.query(`
+  db.query(
+    `
   DELETE FROM products WHERE id=?
-  `, [id], cb)
+  `,
+    [id],
+    cb
+  )
 }
 
 exports.getProductsByCategory = (id, data, cb) => {
   db.query(
     `
-  SELECT products.id, products.name, products.price,products.picture, products.quantity, products.description, products.delivery_on FROM products
+  SELECT products.id, products.name, products.picture, products.price,  products.quantity, products.description, products.delivery_on FROM products
   LEFT JOIN product_categories on product_categories.id_product = products.id
   WHERE product_categories.id_category = ? LIMIT ? OFFSET ?
   `,
@@ -92,52 +101,77 @@ INNER JOIN variants ON product_variants.id_variant = variants.id WHERE products.
 exports.searchProducts = (search, data, cb) => {
   db.query(
     `
-  SELECT products.id, products.name, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
+  SELECT products.id, products.name, products.picture, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
 LEFT JOIN categories ON categories.id = products.id_category WHERE products.name LIKE '%${search}%'
 LIMIT ? OFFSET ?
-  `, [data.limit, data.offset],
+  `,
+    [data.limit, data.offset],
     cb
   )
 }
 exports.sortProducts = (search, column, data, order, cb) => {
   db.query(
-  `SELECT products.id, products.name, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
+    `SELECT products.id, products.name, products.picture, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
 LEFT JOIN categories ON categories.id = products.id_category WHERE products.name LIKE '%${search}%'
-ORDER BY products.${column} ${order} LIMIT ? OFFSET ?`, [data.limit, data.offset], cb)
+ORDER BY products.${column} ${order} LIMIT ? OFFSET ?`,
+    [data.limit, data.offset],
+    cb
+  )
 }
 
 exports.sortAllProducts = (column, data, order, cb) => {
   db.query(
-  `SELECT products.id, products.name, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
+    `SELECT products.id, products.name, products.picture, products.price, categories.name AS category_name,products.created_at, products.updated_at FROM products
 LEFT JOIN categories ON categories.id = products.id_category
-ORDER BY products.${column} ${order} LIMIT ? OFFSET ?`, [data.limit, data.offset], cb)
+ORDER BY products.${column} ${order} LIMIT ? OFFSET ?`,
+    [data.limit, data.offset],
+    cb
+  )
 }
 
 exports.updateProduct = (data, cb) => {
-  db.query(`
-  UPDATE products SET products.picture=?, products.name=? ,products.price=?, products.updated_at=? WHERE products.id=?
-  `, [data.picture, data.name, data.price, data.updated_at, data.id], cb)
+  db.query(
+    `
+  UPDATE products SET products.picture=?, products.name=? ,products.price=?, products.quantity=?, products.updated_at=? WHERE products.id=?
+  `,
+    [data.picture, data.name, data.price, data.quantity, data.updated_at, data.id],
+    cb
+  )
 }
 
 exports.updateProductPartial = (data, cb) => {
   const key = Object.keys(data)
   const lastColumn = key[key.length - 1]
-  db.query(`
+  db.query(
+    `
   UPDATE products SET ${lastColumn} = ?, updated_at=? WHERE id=?
-  `, [data[lastColumn], data.updated_at, data.id], cb)
+  `,
+    [data[lastColumn], data.updated_at, data.id],
+    cb
+  )
 }
 exports.getProductsCount = (data, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT COUNT(products.id) AS count FROM products WHERE products.name LIKE '%${data.search}%'
-  `, cb)
+  `,
+    cb
+  )
 }
 exports.getCount = (cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT COUNT(products.id) AS count FROM products WHERE products.name LIKE '%%'
-  `, cb)
+  `,
+    cb
+  )
 }
 exports.getProductsById = (id, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT id, name, price FROM products WHERE id IN (?)
-  `, [id], cb)
+  `,
+    [id],
+    cb
+  )
 }

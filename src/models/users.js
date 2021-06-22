@@ -1,37 +1,59 @@
-const db = require('../helpers/db')
-const table = 'users'
-const { promisify } = require('util')
-const execPromise = promisify(db.query).bind(db)
+const db = require("../helpers/db");
+const table = "users";
+const { promisify } = require("util");
+const execPromise = promisify(db.query).bind(db);
 
 exports.createUsers = (data, cb) => {
-  db.query(`
-  INSERT INTO ${table} (name, email, password) VALUES (?,?,?)
-  `, [data.name, data.email, data.password], cb)
-}
+  db.query(
+    `
+  INSERT INTO ${table} (phone_number, email, password) VALUES (?,?,?)
+  `,
+    [data.phone_number, data.email, data.password],
+    cb
+  );
+};
 
 exports.getUserByEmail = (email, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT users.id ,users.email, users.password FROM users WHERE users.email = ?
-  `, [email], cb)
-}
+  `,
+    [email],
+    cb
+  );
+};
 exports.getUserRole = (id, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT role FROM users WHERE id = ?
-  `, [id], cb)
-}
+  `,
+    [id],
+    cb
+  );
+};
 
 exports.getUserRoleAsync = (id) => {
-  return execPromise(`
+  return execPromise(
+    `
   SELECT role FROM users WHERE id = ?
-  `, [id])
-}
+  `,
+    [id]
+  );
+};
 exports.getUserIdAsync = (id) => {
-  return execPromise(`
+  return execPromise(
+    `
   SELECT id FROM users WHERE id = ?
-  `, [id])
-}
+  `,
+    [id]
+  );
+};
 exports.getUserById = (id, cb) => {
-  db.query(`
+  db.query(
+    `
   SELECT id, role, name, picture, email, address, phone_number FROM users WHERE id = ?
-  `, [id], cb)
-}
+  `,
+    [id],
+    cb
+  );
+};

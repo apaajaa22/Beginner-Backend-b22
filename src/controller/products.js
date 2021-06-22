@@ -94,7 +94,10 @@ exports.getProducts = (req, res) => {
       (err, results, _fields) => {
         if (!err) {
           results.forEach((pic, index) => {
-            if (results[index].picture !== null && !results[index].picture.startsWith('http')) {
+            if (
+              results[index].picture !== null &&
+              !results[index].picture.startsWith('http')
+            ) {
               results[index].picture = `${APP_URL}${results[index].picture}`
             }
           })
@@ -146,7 +149,10 @@ exports.getProducts = (req, res) => {
     productModel.sortAllProducts(sort, data, order, (err, results, _fields) => {
       if (!err) {
         results.forEach((pic, index) => {
-          if (results[index].picture !== null && !results[index].picture.startsWith('http')) {
+          if (
+            results[index].picture !== null &&
+            !results[index].picture.startsWith('http')
+          ) {
             results[index].picture = `${APP_URL}${results[index].picture}`
           }
         })
@@ -191,7 +197,10 @@ exports.getProducts = (req, res) => {
     productModel.searchProducts(search, data, (err, results, _fields) => {
       if (!err) {
         results.forEach((pic, index) => {
-          if (results[index].picture !== null && !results[index].picture.startsWith('http')) {
+          if (
+            results[index].picture !== null &&
+            !results[index].picture.startsWith('http')
+          ) {
             results[index].picture = `${APP_URL}${results[index].picture}`
           }
         })
@@ -204,13 +213,13 @@ exports.getProducts = (req, res) => {
             pageInfo.lastPage = lastPage
             pageInfo.limitData = data.limit
             pageInfo.nextPage =
-                data.page < lastPage
-                  ? `${APP_URL}/products?page=${data.page + 1}`
-                  : null
+              data.page < lastPage
+                ? `${APP_URL}/products?page=${data.page + 1}`
+                : null
             pageInfo.prevPage =
-                data.page > 1
-                  ? `${APP_URL}/products?page=${data.page - 1}`
-                  : null
+              data.page > 1
+                ? `${APP_URL}/products?page=${data.page - 1}`
+                : null
             if (results.length < 1) {
               return standardResponse(res, 'product not found', null, 404)
             } else {
@@ -240,7 +249,10 @@ exports.getProducts = (req, res) => {
     productModel.getProducts(data, (err, results, _fields) => {
       if (!err) {
         results.forEach((pic, index) => {
-          if (results[index].picture !== null && !results[index].picture.startsWith('http')) {
+          if (
+            results[index].picture !== null &&
+            !results[index].picture.startsWith('http')
+          ) {
             results[index].picture = `${APP_URL}${results[index].picture}`
           }
         })
@@ -253,13 +265,13 @@ exports.getProducts = (req, res) => {
             pageInfo.lastPage = lastPage
             pageInfo.limitData = data.limit
             pageInfo.nextPage =
-                data.page < lastPage
-                  ? `${APP_URL}/products?page=${data.page + 1}`
-                  : null
+              data.page < lastPage
+                ? `${APP_URL}/products?page=${data.page + 1}`
+                : null
             pageInfo.prevPage =
-                data.page > 1
-                  ? `${APP_URL}/products?page=${data.page - 1}`
-                  : null
+              data.page > 1
+                ? `${APP_URL}/products?page=${data.page - 1}`
+                : null
             return standardResponse(
               res,
               'product found',
@@ -286,42 +298,46 @@ exports.getProductDetails = (req, res) => {
   const { id } = req.params
   productModel.getProductDetails(id, (err, results, _fields) => {
     if (!err) {
-      if (results.length > 0) {
-        const item = results[0]
-        if (item.picture !== null && !item.picture.startsWith('http')) {
-          item.picture = `${APP_URL}${item.picture}`
+      results.forEach((pic, index) => {
+        if (
+          results[index].picture !== null &&
+          !results[index].picture.startsWith('http')
+        ) {
+          results[index].picture = `${APP_URL}${results[index].picture}`
         }
-        const data = {
-          id: '',
-          picture: '',
-          name: '',
-          description: '',
-          quantity: '',
-          delivery_on: '',
-          variants: [],
-          created_at: '',
-          updated_at: '',
-          ...results[0]
-        }
-        const hiddenColumn = [
-          'additional_price',
-          'end_price',
-          'variant',
-          'variant_code'
-        ]
-        hiddenColumn.forEach((column) => {
-          delete data[column]
-        })
-        results.forEach((product) => {
-          data.variants.push({
-            name: product.variant,
-            code: product.variant_code,
-            base_price: product.base_price,
-            price: product.end_price
-          })
-        })
-        return standardResponse(res, 'Detail product', data)
+      })
+      const data = {
+        id: '',
+        picture: '',
+        name: '',
+        description: '',
+        quantity: '',
+        delivery_on: '',
+        variants: [],
+        created_at: '',
+        updated_at: '',
+        ...results[0]
       }
+      const hiddenColumn = [
+        'additional_price',
+        'end_price',
+        'variant',
+        'variant_code'
+      ]
+      hiddenColumn.forEach((column) => {
+        delete data[column]
+      })
+      results.forEach((product) => {
+        data.variants.push({
+          picture: product.picture,
+          product: product.name,
+          name: product.variant,
+          code: product.variant_code,
+          base_price: product.base_price,
+          price: product.end_price
+        })
+      })
+      return standardResponse(res, 'Detail product', data)
     }
   })
 }
@@ -335,7 +351,9 @@ exports.updateProductPartial = async (req, res) => {
         productModel.getProductById(id, (err, results, _fields) => {
           if (!err) {
             if (results.length > 0) {
-              req.body.picture = req.file ? `${process.env.APP_UPLOAD_ROUTE}/${req.file.filename}` : null
+              req.body.picture = req.file
+                ? `${process.env.APP_UPLOAD_ROUTE}/${req.file.filename}`
+                : null
               const key = Object.keys(req.body)
               if (key.length > 2) {
                 return standardResponse(
@@ -388,21 +406,31 @@ exports.updateProduct = async (req, res) => {
         productModel.getProductById(id, (err, results, _fields) => {
           if (!err) {
             if (results.length > 0) {
-              req.body.picture = req.file ? `${process.env.APP_UPLOAD_ROUTE}/${req.file.filename}` : null
+              req.body.picture = req.file
+                ? `${process.env.APP_UPLOAD_ROUTE}/${req.file.filename}`
+                : null
               const { name, price, picture } = req.body
               const updateData = { id, name, price, picture }
-              productModel.updateProduct(updateData, (err, results, _fields) => {
-                if (!err) {
-                  return standardResponse(
-                    res,
-                    'Item updated successfully',
-                    null,
-                    200
-                  )
-                } else {
-                  return standardResponse(res, 'An error occurred', null, 400)
+              productModel.updateProduct(
+                updateData,
+                (err, results, _fields) => {
+                  if (!err) {
+                    return standardResponse(
+                      res,
+                      'Item updated successfully',
+                      null,
+                      200
+                    )
+                  } else {
+                    return standardResponse(
+                      res,
+                      'An error occurred',
+                      null,
+                      400
+                    )
+                  }
                 }
-              })
+              )
             } else {
               return standardResponse(res, 'Item not found!', null, 404)
             }

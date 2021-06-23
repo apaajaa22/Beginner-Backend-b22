@@ -1,7 +1,7 @@
 const { response } = require('../helpers/standardResponse')
 const { codeTransaction } = require('../helpers/transaction')
 const { getProductsById } = require('../models/products')
-const { createTransaction, createProductTransaction, getTransactionByIdOn, getTransactionDetail } = require('../models/transactions')
+const { createTransaction, createProductTransaction, getTransactionByIdOn, getTransactionDetail, getTransactionId } = require('../models/transactions')
 const { getUserById } = require('../models/users')
 
 exports.createTransaction = (req, res) => {
@@ -86,9 +86,11 @@ exports.getTransactionDetail = (req, res) => {
   getTransactionByIdOn(user, (err, dataInvoice) => {
     if (err) throw err
     getTransactionDetail(id, (err, results) => {
-      const invoice = dataInvoice
       if (!err) {
-        response(res, 'History Detail', results, 200, undefined, invoice)
+        getTransactionId(id, (err, resultsInvoice) => {
+          if (err) throw err
+          response(res, 'History Detail', results, 200, undefined, resultsInvoice)
+        })
       } else {
         response(res, 'History not found', null, 404)
       }

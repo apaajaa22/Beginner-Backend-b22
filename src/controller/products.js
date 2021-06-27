@@ -329,7 +329,9 @@ exports.getProductDetails = (req, res) => {
       })
       results.forEach((product) => {
         data.variants.push({
+          id: product.id,
           picture: product.picture,
+          id_variant: product.id_variant,
           product: product.name,
           name: product.variant,
           code: product.variant_code,

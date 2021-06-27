@@ -12,4 +12,4 @@ const storage = multer.diskStorage({
   }
 })
 
-module.exports = multer({ storage, limits: { fileSize: '1MB' } })
+module.exports = multer({ storage, limits: { fileSize: '2MB' } })

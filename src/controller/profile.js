@@ -3,6 +3,7 @@ const { response } = require('../helpers/standardResponse')
 const { getProfile, updateProfile, updateProfilePartial, deleteProfile, createProfile, changeProfilePassword } = require('../models/profile')
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
+const { APP_URL, APP_UPLOAD_ROUTE } = process.env
 
 exports.createProfile = async (req, res) => {
   const err = validationResult(req)
@@ -28,6 +29,14 @@ exports.createProfile = async (req, res) => {
 exports.getProfile = (req, res) => {
   getProfile(req.authUser.id, (err, results) => {
     if (!err) {
+      results.forEach((pic, index) => {
+        if (
+          results[index].picture !== null &&
+          !results[index].picture.startsWith('http')
+        ) {
+          results[index].picture = `${APP_URL}${results[index].picture}`
+        }
+      })
       return response(res, 'Profile Detail', results, 200)
     } else {
       return response(res, 'Profile not found', null, 404)
@@ -59,8 +68,11 @@ exports.updateProfile = (req, res) => {
   getProfile(req.authUser.id, (err, results, _fields) => {
     if (!err) {
       if (results.length > 0) {
-        const { name, address, phoneNumber } = req.body
-        const updateData = { name, address, phone_number: phoneNumber }
+        req.body.picture = req.file
+          ? `${APP_UPLOAD_ROUTE}/${req.file.filename}`
+          : null
+        const { name, email, address, number, picture } = req.body
+        const updateData = { name, email, address, phone_number: number, picture }
         updateProfile(updateData, req.authUser.id, (err, results, _fields) => {
           if (!err) {
             return response(res, 'Profile updated successfully', null, 200)
@@ -72,6 +84,24 @@ exports.updateProfile = (req, res) => {
         return response(res, 'Profile not found!', null, 404)
       }
     }
+  })
+}
+
+exports.profileUpdate = (req, res) => {
+  getProfile(req.authUser.id, (err, results, _fields) => {
+    if (err) throw err
+    const { name, email, address, phone_number: number } = req.body
+    return res.send({
+      success: true,
+      message: 'Profile updated successfully',
+      results: {
+        name,
+        email,
+        address,
+        number,
+        picture: `${APP_URL}${APP_UPLOAD_ROUTE}/${req.file.filename}`
+      }
+    })
   })
 }
 

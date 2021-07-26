@@ -8,13 +8,13 @@ exports.createProfile = (data, cb) => {
 }
 exports.getProfile = (id, cb) => {
   db.query(`
-  SELECT id, role, name, email, address, phone_number, picture FROM ${table} WHERE id = ?
+  SELECT id, role, name, email, address, phone_number, picture, gender, birth FROM ${table} WHERE id = ?
   `, [id], cb)
 }
 exports.updateProfile = (data, id, cb) => {
   db.query(`
-  UPDATE ${table} SET name=?, email=?, address=?, phone_number=?, picture=? WHERE id=?
-  `, [data.name, data.email, data.address, data.phone_number, data.picture, id], cb)
+  UPDATE ${table} SET name=?, email=?, address=?, phone_number=?, picture=?, gender=?, birth=? WHERE id=?
+  `, [data.name, data.email, data.address, data.phone_number, data.picture, data.gender, data.birth, id], cb)
 }
 exports.changeProfilePassword = (data, id, cb) => {
   db.query(`

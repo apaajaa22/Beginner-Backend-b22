@@ -112,6 +112,7 @@ exports.getProductsByCategory = (req, res) => {
     }
   })
 }
+
 exports.updateCategoryPartial = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)

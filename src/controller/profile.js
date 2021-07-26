@@ -71,8 +71,8 @@ exports.updateProfile = (req, res) => {
         req.body.picture = req.file
           ? `${APP_UPLOAD_ROUTE}/${req.file.filename}`
           : null
-        const { name, email, address, number, picture } = req.body
-        const updateData = { name, email, address, phone_number: number, picture }
+        const { name, email, address, number, picture, gender, birth } = req.body
+        const updateData = { name, email, address, phone_number: number, picture, gender, birth }
         updateProfile(updateData, req.authUser.id, (err, results, _fields) => {
           if (!err) {
             return response(res, 'Profile updated successfully', null, 200)

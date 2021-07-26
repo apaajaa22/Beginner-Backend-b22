@@ -65,3 +65,13 @@ exports.getTransactionId = (id, cb) => {
     cb
   )
 }
+
+exports.deleteHistory = (id, cb) => {
+  db.query(
+    `
+  DELETE FROM transactions WHERE id=?
+  `,
+    [id],
+    cb
+  )
+}

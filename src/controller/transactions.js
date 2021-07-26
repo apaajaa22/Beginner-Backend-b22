@@ -1,7 +1,7 @@
 const { response } = require('../helpers/standardResponse')
 const { codeTransaction } = require('../helpers/transaction')
 const { getProductsById } = require('../models/products')
-const { createTransaction, createProductTransaction, getTransactionByIdOn, getTransactionDetail, getTransactionId } = require('../models/transactions')
+const { createTransaction, createProductTransaction, getTransactionByIdOn, getTransactionDetail, getTransactionId, deleteHistory } = require('../models/transactions')
 const { getUserById } = require('../models/users')
 
 exports.createTransaction = (req, res) => {
@@ -100,5 +100,30 @@ exports.getTransactionDetail = (req, res) => {
         return response(res, 'History not found', null, 404)
       }
     })
+  })
+}
+
+exports.deleteHistory = (req, res) => {
+  const { id } = req.params
+  // const { id: user } = req.authUser
+  getTransactionId(id, (err, results, _fields) => {
+    if (!err) {
+      if (results.length > 0) {
+        deleteHistory(id, (err, results, _fields) => {
+          if (!err) {
+            return response(
+              res,
+              'history has been deleted!',
+              null,
+              200
+            )
+          } else {
+            return response(res, 'history not found!', null, 404)
+          }
+        })
+      } else {
+        return response(res, 'history not found!', null, 404)
+      }
+    }
   })
 }

@@ -3,14 +3,14 @@ const { response: standardResponse } = require('../helpers/standardResponse')
 const { validateInteger } = require('../helpers/validation')
 const { createProductCategory } = require('../models/productCategories')
 const { createProductVariants } = require('../models/productVariants')
-const productPicture = require('../helpers/upload').single('picture')
+const uploadFilter = require('../helpers/upload')
 const { APP_URL, APP_UPLOAD_ROUTE } = process.env
 const { getUserRoleAsync } = require('../models/users')
 
 exports.createProduct = async (req, res) => {
   const userRole = await getUserRoleAsync(req.authUser.id)
   if (userRole[0].role === 'Admin') {
-    productPicture(req, res, (err) => {
+    uploadFilter(req, res, (err) => {
       if (!err) {
         validateInteger(res, req.body.price, 'Price', () => {
           validateInteger(res, req.body.quantity, 'Quantity', () => {
@@ -79,7 +79,7 @@ exports.getProducts = (req, res) => {
   const sort = req.query.sort
   const order = req.query.order || 'asc'
   const data = req.query
-  data.limit = parseInt(data.limit) || 8
+  data.limit = parseInt(data.limit) || 12
   data.offset = parseInt(data.offset) || 0
   data.page = parseInt(data.page) || 1
   data.offset = data.page * data.limit - data.limit
@@ -111,11 +111,11 @@ exports.getProducts = (req, res) => {
               pageInfo.limitData = data.limit
               pageInfo.nextPage =
                 data.page < lastPage
-                  ? `${APP_URL}/products?page=${data.page + 1}`
+                  ? `${APP_URL}/products?page=${data.page + 1}&search=${search}&sort=${sort}`
                   : null
               pageInfo.prevPage =
                 data.page > 1
-                  ? `${APP_URL}/products?page=${data.page - 1}`
+                  ? `${APP_URL}/products?page=${data.page - 1}&search=${search}&sort=${sort}`
                   : null
               return standardResponse(
                 res,
@@ -166,11 +166,11 @@ exports.getProducts = (req, res) => {
             pageInfo.limitData = data.limit
             pageInfo.nextPage =
               data.page < lastPage
-                ? `${APP_URL}/products?page=${data.page + 1}`
+                ? `${APP_URL}/products?page=${data.page + 1}&search=${search}&sort=${sort}`
                 : null
             pageInfo.prevPage =
               data.page > 1
-                ? `${APP_URL}/products?page=${data.page - 1}`
+                ? `${APP_URL}/products?page=${data.page - 1}&search=${search}&sort=${sort}`
                 : null
             return standardResponse(
               res,
@@ -348,7 +348,7 @@ exports.updateProductPartial = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)
   if (userRole[0].role === 'Admin') {
-    productPicture(req, res, (err) => {
+    uploadFilter(req, res, (err) => {
       if (!err) {
         productModel.getProductById(id, (err, results, _fields) => {
           if (!err) {
@@ -403,7 +403,7 @@ exports.updateProduct = async (req, res) => {
   const { id } = req.params
   const userRole = await getUserRoleAsync(req.authUser.id)
   if (userRole[0].role === 'Admin') {
-    productPicture(req, res, (err) => {
+    uploadFilter(req, res, (err) => {
       if (!err) {
         productModel.getProductById(id, (err, results, _fields) => {
           if (!err) {

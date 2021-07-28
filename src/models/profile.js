@@ -16,6 +16,11 @@ exports.updateProfile = (data, id, cb) => {
   UPDATE ${table} SET name=?, email=?, address=?, phone_number=?, picture=?, gender=?, birth=? WHERE id=?
   `, [data.name, data.email, data.address, data.phone_number, data.picture, data.gender, data.birth, id], cb)
 }
+exports.updateProfile2 = (data, id, cb) => {
+  db.query(`
+  UPDATE ${table} SET name=?, email=?, address=?, phone_number=?, gender=?, birth=? WHERE id=?
+  `, [data.name, data.email, data.address, data.phone_number, data.gender, data.birth, id], cb)
+}
 exports.changeProfilePassword = (data, id, cb) => {
   db.query(`
   UPDATE ${table} SET password=? WHERE id=?

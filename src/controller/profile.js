@@ -1,9 +1,10 @@
 
 const { response } = require('../helpers/standardResponse')
-const { getProfile, updateProfile, updateProfilePartial, deleteProfile, createProfile, changeProfilePassword } = require('../models/profile')
+const { getProfile, updateProfile, updateProfilePartial, deleteProfile, createProfile, changeProfilePassword, updateProfile2 } = require('../models/profile')
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
-const { APP_URL, APP_UPLOAD_ROUTE } = process.env
+const { APP_URL, APP_UPLOAD_ROUTE, APP_UPLOAD_PATH } = process.env
+const fs = require('fs')
 
 exports.createProfile = async (req, res) => {
   const err = validationResult(req)
@@ -65,24 +66,45 @@ exports.ChangeProfilePassword = (req, res) => {
 }
 
 exports.updateProfile = (req, res) => {
-  getProfile(req.authUser.id, (err, results, _fields) => {
+  getProfile(req.authUser.id, (err, oldResults, _fields) => {
+    console.log('old', oldResults)
     if (!err) {
-      if (results.length > 0) {
+      if (oldResults.length > 0) {
         req.body.picture = req.file
           ? `${APP_UPLOAD_ROUTE}/${req.file.filename}`
           : null
         const { name, email, address, number, picture, gender, birth } = req.body
-        const updateData = { name, email, address, phone_number: number, picture, gender, birth }
-        updateProfile(updateData, req.authUser.id, (err, results, _fields) => {
-          if (!err) {
-            return response(res, 'Profile updated successfully', null, 200)
-          } else {
-            return response(res, 'An error occurred', null, 400)
-          }
-        })
+        if (picture) {
+          const updateData = { name, email, address, phone_number: number, picture, gender, birth }
+          updateProfile(updateData, req.authUser.id, (err, results, _fields) => {
+            if (!err) {
+              if (oldResults[0].picture !== null) {
+                const oldpath = oldResults[0].picture
+                const path = oldpath.split('/')
+                fs.unlinkSync(APP_UPLOAD_PATH + '/' + path[2])
+                return response(res, 'Profile updated successfully', null, 200)
+              } else {
+                return response(res, 'Profile updated successfully', null, 200)
+              }
+            } else {
+              return response(res, 'An error occurred', null, 400)
+            }
+          })
+        } else {
+          const updateData = { name, email, address, phone_number: number, gender, birth }
+          updateProfile2(updateData, req.authUser.id, (err, results, _fields) => {
+            if (!err) {
+              return response(res, 'Profile updated successfully', null, 200)
+            } else {
+              return response(res, 'An error occurred', null, 400)
+            }
+          })
+        }
       } else {
         return response(res, 'Profile not found!', null, 404)
       }
+    } else {
+      return response(res, 'Profile not found!', null, 404)
     }
   })
 }

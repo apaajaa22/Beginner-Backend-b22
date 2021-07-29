@@ -1,4 +1,4 @@
-# ExpressJS - backend-beginner RESTfull API
+# ExpressJS - Backend_CoffeeShop RESTfull API
 
 ## About
 CRUD database for:

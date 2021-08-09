@@ -4,7 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
-const { APP_PORT, APP_UPLOAD_ROUTE, APP_UPLOAD_PATH } = process.env
+const { PORT, APP_UPLOAD_ROUTE, APP_UPLOAD_PATH } = process.env
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -29,6 +29,6 @@ app.use('/variants', routeVariant)
 app.use('/private', routeProfile)
 app.use('/auth', routeAuth)
 
-app.listen(APP_PORT, () => {
-  console.log(`listening on port ${APP_PORT}`)
+app.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`)
 })

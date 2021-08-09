@@ -35,9 +35,9 @@ CRUD database for:
 ## Set up .env file
 Open .env file on your favorite code editor, and copy paste this code below :
 
-``` 
+```
 NODE_ENV=development
-APP_PORT=8080
+PORT=8080
 APP_URL=http://localhost:8080
 APP_KEY=superSecret!
 APP_UPLOAD_ROUTE=/uploads

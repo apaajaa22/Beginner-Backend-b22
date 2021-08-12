@@ -87,6 +87,9 @@ exports.updateProfile = (req, res) => {
                 return response(res, 'Profile updated successfully', null, 200)
               }
             } else {
+              const oldpath = oldResults[0].picture
+              const path = oldpath.split('/')
+              fs.unlinkSync(APP_UPLOAD_PATH + '/' + path[2])
               return response(res, 'An error occurred', null, 400)
             }
           })

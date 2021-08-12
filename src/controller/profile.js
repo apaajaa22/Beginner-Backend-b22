@@ -81,9 +81,8 @@ exports.updateProfile = (req, res) => {
               if (oldResults[0].picture !== null) {
                 const oldpath = oldResults[0].picture
                 const path = oldpath.split('/')
-                // fs.unlinkSync(APP_URL + APP_UPLOAD_ROUTE + '/' + path[2])
-                console.log(APP_URL + APP_UPLOAD_ROUTE + '/' + path[2])
-                return response(oldpath, 'Profile updated successfully', null, 200)
+                fs.unlinkSync(oldpath)
+                return response(res, 'Profile updated successfully', null, 200)
               } else {
                 return response(res, 'Profile updated successfully', null, 200)
               }

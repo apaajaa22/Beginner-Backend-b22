@@ -6,9 +6,9 @@ const execPromise = promisify(db.query).bind(db)
 exports.createUsers = (data, cb) => {
   db.query(
     `
-  INSERT INTO ${table} (name, phone_number, email, password) VALUES (?,?,?)
+  INSERT INTO ${table} (name, phone_number, email, password) VALUES (?,?,?,?)
   `,
-    [data.name, data.phone_number, data.email, data.password],
+    ['', data.phone_number, data.email, data.password],
     cb
   )
 }

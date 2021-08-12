@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
         return response(res, 'registration failed', null, 400)
       }
     } else {
-      return response(res, 'Internal server error', null, 500)
+      return response(res, err, null, 500)
     }
   })
 }

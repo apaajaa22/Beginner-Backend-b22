@@ -8,7 +8,7 @@ exports.createUsers = (data, cb) => {
     `
   INSERT INTO ${table} (name, phone_number, email, password) VALUES (?,?,?)
   `,
-    [data.name = '', data.phone_number, data.email, data.password],
+    ['', data.phone_number, data.email, data.password],
     cb
   )
 }

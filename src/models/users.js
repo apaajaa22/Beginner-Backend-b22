@@ -1,17 +1,17 @@
-const db = require("../helpers/db");
-const table = "users";
-const { promisify } = require("util");
-const execPromise = promisify(db.query).bind(db);
+const db = require('../helpers/db')
+const table = 'users'
+const { promisify } = require('util')
+const execPromise = promisify(db.query).bind(db)
 
 exports.createUsers = (data, cb) => {
   db.query(
     `
-  INSERT INTO ${table} (phone_number, email, password) VALUES (?,?,?)
+  INSERT INTO ${table} (name, phone_number, email, password) VALUES (?,?,?)
   `,
-    [data.phone_number, data.email, data.password],
+    [data.name = '', data.phone_number, data.email, data.password],
     cb
-  );
-};
+  )
+}
 
 exports.getUserByEmail = (email, cb) => {
   db.query(
@@ -20,8 +20,8 @@ exports.getUserByEmail = (email, cb) => {
   `,
     [email],
     cb
-  );
-};
+  )
+}
 exports.getUserRole = (id, cb) => {
   db.query(
     `
@@ -29,8 +29,8 @@ exports.getUserRole = (id, cb) => {
   `,
     [id],
     cb
-  );
-};
+  )
+}
 
 exports.getUserRoleAsync = (id) => {
   return execPromise(
@@ -38,16 +38,16 @@ exports.getUserRoleAsync = (id) => {
   SELECT role FROM users WHERE id = ?
   `,
     [id]
-  );
-};
+  )
+}
 exports.getUserIdAsync = (id) => {
   return execPromise(
     `
   SELECT id FROM users WHERE id = ?
   `,
     [id]
-  );
-};
+  )
+}
 exports.getUserById = (id, cb) => {
   db.query(
     `
@@ -55,5 +55,5 @@ exports.getUserById = (id, cb) => {
   `,
     [id],
     cb
-  );
-};
+  )
+}

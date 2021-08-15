@@ -3,12 +3,25 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const socket = require('./src/middlewares/socket')
 
 const { PORT, APP_UPLOAD_ROUTE, APP_UPLOAD_PATH } = process.env
 
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+})
+
+io.on('connection', () => {
+  console.log('socket connection is running')
+})
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
+app.use(socket(io))
 app.use(APP_UPLOAD_ROUTE, express.static(APP_UPLOAD_PATH))
 app.get('/', (req, res) => {
   return res.json({
@@ -29,6 +42,6 @@ app.use('/variants', routeVariant)
 app.use('/private', routeProfile)
 app.use('/auth', routeAuth)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`)
 })

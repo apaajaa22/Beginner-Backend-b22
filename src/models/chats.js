@@ -25,8 +25,8 @@ exports.getAllChatRoom = (data, cb) => {
 }
 exports.getUserChat = (data, cb) => {
   db.query(`
-  SELECT chats.id, chats.message, chats.sender, chats.recipient, users.name, users.picture
-  FROM chats LEFT JOIN users ON (chats.recipient = users.phone_number)
+  SELECT users.id as id_users, chats.id, chats.message, chats.sender, chats.recipient, users.name, users.picture
+  FROM chats LEFT JOIN users ON (chats.recipient = users.phone_number or chats.sender=users.phone_number)
   WHERE (chats.sender=? or chats.recipient=?)
   AND isLatest = 1
   `, [data.sender, data.recipient], cb)

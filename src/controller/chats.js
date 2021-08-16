@@ -24,10 +24,11 @@ exports.createChat = (req, res) => {
                 }
                 createChat(formData, (err, results, _fields) => {
                   if (!err) {
-                    req.socket.emit(recipient, {
+                    req.socket.emit('recipient', {
                       message: req.body.message,
                       sender: resultsMe[0].phone_number
                     })
+                    // req.socket.emit('hello', 'world')
                     return response(res, 'send message success', null, 200)
                   } else {
                     return response(res, 'failed to send a message', null, 400)

@@ -3,15 +3,17 @@ const db = require('../helpers/db')
 const table = 'chats'
 
 exports.createChat = (data, cb) => {
-  db.query(`
+  const datanew = db.query(`
   INSERT INTO ${table} (message, sender, recipient, isLatest)
   VALUES (?,?,?,?)
   `, [data.message, data.sender, data.recipient, data.isLatest = 1], cb)
+  console.log(datanew)
 }
 exports.updateChat = (data, cb) => {
-  db.query(`
+  const datanew = db.query(`
   UPDATE ${table} SET isLatest=0 WHERE sender in (?,?) and recipient in (?,?) and isLatest = 1
   `, [data.sender, data.recipient, data.recipient, data.sender], cb)
+  console.log(datanew)
 }
 exports.checkPhone = (data, cb) => {
   db.query('SELECT * from users WHERE phone_number=?', [data.phone], cb)
@@ -36,4 +38,10 @@ exports.findUsers = (data, cb) => {
   db.query(`
   SELECT * FROM users WHERE users.${data.col} LIKE '%${data.search}%'
   `, cb)
+}
+
+exports.deleteChat = (id, cb) => {
+  db.query(`
+  DELETE FROM chats WHERE chats.id=?
+  `, [id], cb)
 }

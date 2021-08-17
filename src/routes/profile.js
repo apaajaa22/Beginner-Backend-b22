@@ -1,5 +1,5 @@
 const route = require('express').Router()
-const { createChat, getChatRoom, getUserChat, findUsers } = require('../controller/chats')
+const { createChat, getChatRoom, getUserChat, findUsers, deleteChat } = require('../controller/chats')
 const profileController = require('../controller/profile')
 const { createTransaction, getTransactionByIdOn, getTransactionDetail, deleteHistory } = require('../controller/transactions')
 const uploadFilter = require('../helpers/upload')
@@ -21,4 +21,5 @@ route.post('/chats', auth, createChat)
 route.get('/chats/all', auth, getChatRoom)
 route.get('/chats/list', auth, getUserChat)
 route.get('/chats/users', auth, findUsers)
+route.delete('/chats/:id', auth, deleteChat)
 module.exports = route

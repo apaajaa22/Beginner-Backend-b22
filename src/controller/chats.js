@@ -1,5 +1,5 @@
 const { response } = require('../helpers/standardResponse')
-const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat, findUsers } = require('../models/chats')
+const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat, findUsers, deleteChat } = require('../models/chats')
 const { getUserById } = require('../models/users')
 const { APP_URL } = process.env
 
@@ -87,13 +87,15 @@ exports.getChatRoom = (req, res) => {
                   phone: resultsMe[0].phone_number
                 },
                 recipient: {
-                  name: resultsAnotherUser[0].name,
-                  picture: resultsAnotherUser[0].picture,
-                  phone: resultsAnotherUser[0].phone_number
+                  name: resultsAnotherUser[0]?.name,
+                  picture: resultsAnotherUser[0]?.picture,
+                  phone: resultsAnotherUser[0]?.phone_number
                 },
                 message: results
               }
               return response(res, 'list chat room', form, 200)
+            } else {
+              return response(res, 'chat room not found', form, 404)
             }
           })
         } else {
@@ -176,6 +178,22 @@ exports.findUsers = (req, res) => {
       return response(res, 'list users', results, 200)
     } else {
       return response(res, 'users not found', null, 404)
+    }
+  })
+}
+
+exports.deleteChat = (req, res) => {
+  const { id } = req.params
+  deleteChat(id, (err, results, _fields) => {
+    if (!err) {
+      return response(
+        res,
+        'chat has been deleted!',
+        null,
+        200
+      )
+    } else {
+      return response(res, 'chat not found!', null, 404)
     }
   })
 }

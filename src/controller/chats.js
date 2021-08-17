@@ -1,5 +1,5 @@
 const { response } = require('../helpers/standardResponse')
-const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat } = require('../models/chats')
+const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat, findUsers } = require('../models/chats')
 const { getUserById } = require('../models/users')
 const { APP_URL } = process.env
 
@@ -131,7 +131,7 @@ exports.getUserChat = (req, res) => {
           })
           const form = {
             sender: resultsMe[0].phone_number,
-            recipient: recipient
+            recipient: resultsMe[0].phone_number
           }
           getUserChat(form, (err, results, _fields) => {
             if (!err) {
@@ -155,6 +155,27 @@ exports.getUserChat = (req, res) => {
       })
     } else {
       return response(res, 'an error occured', null, 500)
+    }
+  })
+}
+
+exports.findUsers = (req, res) => {
+  const data = req.query
+  data.search = data.search || ''
+  data.col = data.col || 'name'
+  findUsers(data, (err, results, _fields) => {
+    if (!err) {
+      results.forEach((pic, index) => {
+        if (
+          results[index].picture !== null &&
+          !results[index].picture.startsWith('http')
+        ) {
+          results[index].picture = `${APP_URL}${results[index].picture}`
+        }
+      })
+      return response(res, 'list users', results, 200)
+    } else {
+      return response(res, 'users not found', null, 404)
     }
   })
 }

@@ -31,3 +31,9 @@ exports.getUserChat = (data, cb) => {
   AND isLatest = 1
   `, [data.sender, data.recipient], cb)
 }
+
+exports.findUsers = (data, cb) => {
+  db.query(`
+  SELECT * FROM users WHERE users.${data.col} LIKE '%${data.search}%'
+  `, cb)
+}

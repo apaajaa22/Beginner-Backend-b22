@@ -39,7 +39,7 @@ exports.getUserChat = (data, cb) => {
   SELECT users.id as id_users, chats.id, chats.message, chats.sender, chats.recipient, users.name, users.picture
   FROM chats LEFT JOIN users ON (chats.recipient = users.phone_number or chats.sender=users.phone_number)
   WHERE (chats.sender=? or chats.recipient=?)
-  AND isLatest = 1
+  AND isLatest = 1 order by chats.id desc
   `, [data.sender, data.recipient], cb)
 }
 

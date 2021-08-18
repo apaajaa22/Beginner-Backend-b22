@@ -66,6 +66,7 @@ exports.ChangeProfilePassword = (req, res) => {
 }
 
 exports.updateProfile = (req, res) => {
+  console.log('a', req, res)
   getProfile(req.authUser.id, (err, oldResults, _fields) => {
     console.log('old', oldResults)
     if (!err) {
@@ -81,7 +82,7 @@ exports.updateProfile = (req, res) => {
               if (oldResults[0].picture !== null) {
                 const oldpath = oldResults[0].picture
                 const path = oldpath.split('/')
-                // fs.unlinkSync(APP_UPLOAD_PATH + '/' + path[2])
+                fs.unlinkSync(APP_UPLOAD_PATH + '/' + path[2])
                 return response(res, 'Profile updated successfully', null, 200)
               } else {
                 return response(res, 'Profile updated successfully', null, 200)

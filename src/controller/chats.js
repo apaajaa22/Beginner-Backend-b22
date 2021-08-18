@@ -1,5 +1,5 @@
 const { response } = require('../helpers/standardResponse')
-const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat, findUsers, deleteChat } = require('../models/chats')
+const { checkPhone, updateChat, createChat, getAllChatRoom, getUserChat, findUsers, deleteChat, updateLastChat } = require('../models/chats')
 const { getUserById } = require('../models/users')
 const { APP_URL } = process.env
 
@@ -165,6 +165,7 @@ exports.findUsers = (req, res) => {
   const data = req.query
   data.search = data.search || ''
   data.col = data.col || 'name'
+  data.id = req.authUser.id
   findUsers(data, (err, results, _fields) => {
     if (!err) {
       results.forEach((pic, index) => {
@@ -184,14 +185,32 @@ exports.findUsers = (req, res) => {
 
 exports.deleteChat = (req, res) => {
   const { id } = req.params
-  deleteChat(id, (err, results, _fields) => {
+  const { recipient } = req.body
+  getUserById(req.authUser.id, (err, results, _fields) => {
     if (!err) {
-      return response(
-        res,
-        'chat has been deleted!',
-        null,
-        200
-      )
+      const sender = results[0].phone_number
+      deleteChat(id, (err, results, _fields) => {
+        if (!err) {
+          const form = {
+            sender: sender,
+            recipient: recipient
+          }
+          updateLastChat(form, (err, result, _fields) => {
+            if (!err) {
+              return response(
+                res,
+                'chat has been deleted!',
+                result,
+                200
+              )
+            } else {
+              return response(res, 'chat not found!', null, 404)
+            }
+          })
+        } else {
+          return response(res, 'chat not found!', null, 404)
+        }
+      })
     } else {
       return response(res, 'chat not found!', null, 404)
     }

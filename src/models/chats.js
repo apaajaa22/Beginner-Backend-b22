@@ -15,6 +15,15 @@ exports.updateChat = (data, cb) => {
   `, [data.sender, data.recipient, data.recipient, data.sender], cb)
   console.log(datanew)
 }
+
+exports.updateLastChat = (data, cb) => {
+  const newdata = db.query(`
+  UPDATE chats SET isLatest=1 WHERE sender in (?,?)
+  and recipient in (?,?)
+  order by chats.createdAt desc limit 1
+  `, [data.sender, data.recipient, data.recipient, data.sender], cb)
+  console.log(newdata)
+}
 exports.checkPhone = (data, cb) => {
   db.query('SELECT * from users WHERE phone_number=?', [data.phone], cb)
 }
@@ -36,8 +45,8 @@ exports.getUserChat = (data, cb) => {
 
 exports.findUsers = (data, cb) => {
   db.query(`
-  SELECT * FROM users WHERE users.${data.col} LIKE '%${data.search}%'
-  `, cb)
+  SELECT * FROM users WHERE users.${data.col} LIKE '%${data.search}%' and users.id != ?
+  `, [data.id], cb)
 }
 
 exports.deleteChat = (id, cb) => {

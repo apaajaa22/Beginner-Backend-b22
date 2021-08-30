@@ -1,5 +1,5 @@
 const { response } = require('../helpers/standardResponse')
-const { createUsers, getUserByEmail } = require('../models/users')
+const { createUsers, getUserByEmail, getUserByPhone } = require('../models/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { APP_KEY } = process.env
@@ -12,15 +12,31 @@ exports.register = async (req, res) => {
     return response(res, err.array()[0].msg, null, 400)
   }
   data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
-  createUsers(data, (err, results) => {
+  getUserByEmail(data.email, async (err, results) => {
     if (!err) {
-      if (results.affectedRows) {
-        return response(res, 'registration successfully', null, 200)
+      if (results.length > 0) {
+        return response(res, 'email is already in use', null, 400)
       } else {
-        return response(res, 'registration failed', null, 400)
+        getUserByPhone(data.phone_number, async (err, results) => {
+          if (!err) {
+            if (results.length > 0) {
+              return response(res, 'phone number is already in use', null, 400)
+            } else {
+              createUsers(data, (err, results) => {
+                if (!err) {
+                  if (results.affectedRows) {
+                    return response(res, 'registration successfully', null, 200)
+                  } else {
+                    return response(res, 'registration failed', null, 400)
+                  }
+                } else {
+                  return response(res, 'Internal server error', null, 500)
+                }
+              })
+            }
+          }
+        })
       }
-    } else {
-      return response(res, 'Internal server error', null, 500)
     }
   })
 }
@@ -34,7 +50,7 @@ exports.login = (req, res) => {
   getUserByEmail(email, async (err, results) => {
     if (!err) {
       if (results.length < 1) {
-        return response(res, 'email or password is false', null, 401)
+        return response(res, 'email not found', null, 401)
       } else {
         const user = results[0]
         const compare = await bcrypt.compare(password, user.password)

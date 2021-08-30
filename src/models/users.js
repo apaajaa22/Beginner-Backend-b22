@@ -22,6 +22,16 @@ exports.getUserByEmail = (email, cb) => {
     cb
   )
 }
+exports.getUserByPhone = (phone, cb) => {
+  db.query(
+    `
+  SELECT users.id ,users.email, users.password FROM users WHERE users.phone_number = ?
+  `,
+    [phone],
+    cb
+  )
+}
+
 exports.getUserRole = (id, cb) => {
   db.query(
     `

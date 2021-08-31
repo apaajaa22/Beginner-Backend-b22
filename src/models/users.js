@@ -13,22 +13,20 @@ exports.createUsers = (data, cb) => {
   )
 }
 
-exports.getUserByEmail = (email, cb) => {
-  db.query(
+exports.getUserByEmail = (email) => {
+  return execPromise(
     `
-  SELECT users.id ,users.email, users.password FROM users WHERE users.email = ?
+    SELECT users.id ,users.email, users.password FROM users WHERE users.email = ?
   `,
-    [email],
-    cb
+    [email]
   )
 }
-exports.getUserByPhone = (phone, cb) => {
-  db.query(
+exports.getUserByPhone = (phone) => {
+  return execPromise(
     `
-  SELECT users.id ,users.email, users.password FROM users WHERE users.phone_number = ?
+    SELECT users.id ,users.email, users.password FROM users WHERE users.phone_number = ?
   `,
-    [phone],
-    cb
+    [phone]
   )
 }
 

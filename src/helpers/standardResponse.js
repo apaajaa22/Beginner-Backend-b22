@@ -1,4 +1,4 @@
-exports.response = (res, message, results, status = 200, pageInfo, invoice) => {
+exports.response = (res, message, results, status, pageInfo, invoice) => {
   const returnData = {
     success: true,
     message,

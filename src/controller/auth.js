@@ -22,13 +22,10 @@ exports.register = async (req, res) => {
   if (resultphone.length > 0) {
     return response(res, 'phone number is already in use', null, 400)
   }
-  createUsers(data, (err, results) => {
-    if (!err) {
-      return response(res, 'registration successfully', null, 200)
-    } else {
-      return response(res, 'registration failed', null, 400)
-    }
-  })
+  const successCreate = await createUsers(data)
+  if (successCreate) {
+    return response(res, 'registration successfully', null, 200)
+  }
 }
 
 exports.login = async (req, res) => {

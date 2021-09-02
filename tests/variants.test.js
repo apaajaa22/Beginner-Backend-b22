@@ -49,26 +49,26 @@ describe('Variants', () => {
     done()
   })
 
-  it ('create variants', (done) => {
-    let req = {
-      authUser: {
-        id: 3
-      },
-      body: {
-        name: 'super pedas',
-        code: 'SP'
-      }
-    }
-    const res = mockingResponse()
-    createVariants(req,res).then((data) => {
-      expect(data.json.args[0][0].success).to.be.true
-      expect(data.status.args[0][0]).equal(200)
-      expect(data.json.args[0][0].message).equal('variant added successfully')
-    }).catch((err) => {
-      console.log(err)
-    })
-    done()
-  })
+  // it ('create variants', (done) => {
+  //   let req = {
+  //     authUser: {
+  //       id: 3
+  //     },
+  //     body: {
+  //       name: 'super pedas',
+  //       code: 'SP'
+  //     }
+  //   }
+  //   const res = mockingResponse()
+  //   createVariants(req,res).then((data) => {
+  //     expect(data.json.args[0][0].success).to.be.true
+  //     expect(data.status.args[0][0]).equal(200)
+  //     expect(data.json.args[0][0].message).equal('variant added successfully')
+  //   }).catch((err) => {
+  //     console.log(err)
+  //   })
+  //   done()
+  // })
 
   it ('dont have permission (CREATE)', (done) => {
     let req = {
@@ -293,23 +293,23 @@ describe('Variants', () => {
     done()
   })
 
-  it ('variants has been deleted! (DELETE)', (done) => {
-    let req = {
-      authUser: {
-        id: 3
-      },
-      params:{
-        id: 27
-      },
-    }
-    const res = mockingResponse()
-    deleteVariants(req,res).then((data) => {
-      expect(data.json.args[0][0].message).equal('variants has been deleted!')
-      expect(data.json.args[0][0].success).to.be.true
-      expect(data.status.args[0][0]).equal(200)
-    }).catch((err) => {
-      console.log(err)
-    })
-    done()
-  })
+  // it ('variants has been deleted! (DELETE)', (done) => {
+  //   let req = {
+  //     authUser: {
+  //       id: 3
+  //     },
+  //     params:{
+  //       id: 27
+  //     },
+  //   }
+  //   const res = mockingResponse()
+  //   deleteVariants(req,res).then((data) => {
+  //     expect(data.json.args[0][0].message).equal('variants has been deleted!')
+  //     expect(data.json.args[0][0].success).to.be.true
+  //     expect(data.status.args[0][0]).equal(200)
+  //   }).catch((err) => {
+  //     console.log(err)
+  //   })
+  //   done()
+  // })
 })

@@ -71,18 +71,14 @@ exports.createTransaction = (req, res) => {
   })
 }
 
-exports.getTransactionByIdOn = (req, res) => {
+exports.getTransactionByIdOn = async (req, res) => {
   const { id } = req.authUser
-  getTransactionByIdOn(id, (err, results) => {
-    if (results < 1) {
-      return response(res, 'History not found', null, 404)
-    }
-    if (!err) {
-      return response(res, 'History Transaction', results, 200)
-    } else {
-      return response(res, 'History not found', null, 404)
-    }
-  })
+  const results = await getTransactionByIdOn(id)
+  if (results.length > 0) {
+    return response(res, 'History Transaction', results, 200)
+  } else {
+    return response(res, 'History not found', null, 404)
+  }
 }
 
 exports.getTransactionDetail = (req, res) => {

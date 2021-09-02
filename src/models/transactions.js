@@ -1,5 +1,7 @@
 const db = require('../helpers/db')
 const table = 'transactions'
+const { promisify } = require('util')
+const execPromise = promisify(db.query).bind(db)
 
 exports.createTransaction = (data, cb) => {
   db.query(
@@ -36,13 +38,12 @@ exports.createProductTransaction = (data, cb) => {
     cb
   )
 }
-exports.getTransactionByIdOn = (id, cb) => {
-  db.query(
+exports.getTransactionByIdOn = (id) => {
+  return execPromise(
     `
-  SELECT id, code, total, tax, shipping_cost, shipping_address, payment_method FROM transactions
+    SELECT id, code, total, tax, shipping_cost, shipping_address, payment_method FROM transactions
   WHERE id_user = ?`,
-    [id],
-    cb
+    [id]
   )
 }
 exports.getTransactionDetail = (id, cb) => {

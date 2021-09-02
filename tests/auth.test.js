@@ -195,9 +195,9 @@ describe('Auth Register Testing', () => {
   // it(`register success`, (done) => {
   //   let req = {
   //     body: {
-  //       email: 'abnika4yhxyu@mail.com',
+  //       email: 'abni34j4yhxyu@mail.com',
   //       password: '123456',
-  //       phone_number: '081571418521'
+  //       phone_number: '081571518521'
   //     }
   //   }
   //   const mockingResponse = () => {

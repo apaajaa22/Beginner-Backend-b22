@@ -1,4 +1,6 @@
 const db = require('../helpers/db')
+const { promisify } = require('util')
+const execPromise = promisify(db.query).bind(db)
 
 exports.createProduct = (data, cb) => {
   if (typeof data.price === 'object') {
@@ -174,5 +176,12 @@ exports.getProductsById = (id, cb) => {
   `,
     [id],
     cb
+  )
+}
+exports.getProductsByIdAync = (id) => {
+  return execPromise(
+    `
+    SELECT id, name, price FROM products WHERE id IN (?)`,
+    [id]
   )
 }

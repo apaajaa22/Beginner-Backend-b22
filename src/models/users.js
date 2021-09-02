@@ -64,3 +64,11 @@ exports.getUserById = (id, cb) => {
     cb
   )
 }
+exports.getUserByIdAsync = (id) => {
+  return execPromise(
+    `
+    SELECT id, role, name, picture, email, address, phone_number FROM users WHERE id = ?
+  `,
+    [id]
+  )
+}

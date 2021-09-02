@@ -8,11 +8,11 @@ const { validationResult } = require('express-validator')
 
 exports.register = async (req, res) => {
   const data = req.body
-  // const err = validationResult(req)
+  const err = validationResult(req)
 
-  // if (!err.isEmpty()) {
-  //   return response(res, err.array()[0].msg, null, 400)
-  // }
+  if (!err.isEmpty()) {
+    return response(res, err.array()[0].msg, null, 400)
+  }
   data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
   const results = await getUserByEmail(data.email)
   if (results.length > 0) {
@@ -22,18 +22,16 @@ exports.register = async (req, res) => {
   if (resultphone.length > 0) {
     return response(res, 'phone number is already in use', null, 400)
   }
-  const successCreate = await createUsers(data)
-  if (successCreate) {
-    return response(res, 'registration successfully', null, 200)
-  }
+  await createUsers(data)
+  return response(res, 'registration successfully', null, 200)
 }
 
 exports.login = async (req, res) => {
   const { email, password } = req.body
-  // const err = validationResult(req)
-  // if (!err.isEmpty()) {
-  //   return response(res, err.array()[0].msg, null, 400)
-  // }
+  const err = validationResult(req)
+  if (!err.isEmpty()) {
+    return response(res, err.array()[0].msg, null, 400)
+  }
   const results = await getUserByEmail(email)
   if (results.length < 1) {
     return response(res, 'email not found', null, 400)

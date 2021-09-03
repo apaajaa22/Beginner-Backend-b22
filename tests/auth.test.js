@@ -36,10 +36,10 @@ describe('Auth Login testing ', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.json.args[0][0].message).equal('email not found')
       expect(data.status.args[0][0]).equal(400)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it(`email or password is false`, (done) => {
@@ -61,10 +61,10 @@ describe('Auth Login testing ', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.json.args[0][0].message).equal('email or password is false')
       expect(data.status.args[0][0]).equal(401)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it(`Login Success`, (done) => {
@@ -85,10 +85,10 @@ describe('Auth Login testing ', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.json.args[0][0].message).equal('Login success')
       expect(data.status.args[0][0]).equal(200)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   // it('Password length less than 6 characters ', (done) => {
@@ -161,10 +161,10 @@ describe('Auth Register Testing', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.json.args[0][0].message).equal('email is already in use')
       expect(data.status.args[0][0]).equal(400)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it(`phone number is already in use`, (done) => {
@@ -186,18 +186,18 @@ describe('Auth Register Testing', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.json.args[0][0].message).equal('phone number is already in use')
       expect(data.status.args[0][0]).equal(400)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   // it(`register success`, (done) => {
   //   let req = {
   //     body: {
-  //       email: 'abni34j4yhxyu@mail.com',
+  //       email: 'nmbsrfhj@mail.com',
   //       password: '123456',
-  //       phone_number: '081571518521'
+  //       phone_number: '081571518421'
   //     }
   //   }
   //   const mockingResponse = () => {
@@ -209,13 +209,13 @@ describe('Auth Register Testing', () => {
   //   const res = mockingResponse()
   //   register(req,res)
   //   .then((data) => {
-  //     expect(data.json.args[0][0].success).to.be.true
   //     expect(data.json.args[0][0].message).equal('registration successfully')
+  //     expect(data.json.args[0][0].success).to.be.true
   //     expect(data.status.args[0][0]).equal(200)
+  //     done()
   //   }).catch((err) => {
-  //     console.log(err)
+  //     done(err)
   //   })
-  //   done()
   // })
 
 

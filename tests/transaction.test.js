@@ -13,6 +13,7 @@ const mockingResponse = () => {
 }
 
 describe('Get transaction by user login', () => {
+
   it('have history transaction', (done) => {
     let req = {
       authUser: {
@@ -25,10 +26,10 @@ describe('Get transaction by user login', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.json.args[0][0].message).equal('History Transaction')
       expect(data.status.args[0][0]).equal(200)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it('History user not found', (done) => {
@@ -43,15 +44,15 @@ describe('Get transaction by user login', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.json.args[0][0].message).equal('History not found')
       expect(data.status.args[0][0]).equal(404)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 })
 
 describe('Get Transaction Detail', () => {
-  it('Get history detail successfully', () => {
+  it('Get history detail successfully', (done) => {
     let req = {
       authUser: {
         id: 3
@@ -66,13 +67,14 @@ describe('Get Transaction Detail', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.status.args[0][0]).equal(200)
       expect(data.json.args[0][0].message).equal('History Detail')
+      done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 
-  it('History not found', () => {
+  it('History not found', (done) => {
     let req = {
       authUser: {
         id: 3
@@ -87,15 +89,16 @@ describe('Get Transaction Detail', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(404)
       expect(data.json.args[0][0].message).equal('History not found')
+      done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 })
 
 describe('Delete Transaction', () => {
-    it('History not found', () => {
+    it('History not found', (done) => {
       let req = {
         params: {
           id: 344
@@ -107,13 +110,14 @@ describe('Delete Transaction', () => {
         expect(data.json.args[0][0].success).to.be.false
         expect(data.status.args[0][0]).equal(404)
         expect(data.json.args[0][0].message).equal('history not found!')
+        done()
       })
       .catch((err) => {
-        console.log(err)
+        done(err)
       })
     })
 
-    // it('History has been deleted', () => {
+    // it('History has been deleted', (done) => {
     //   let req = {
     //     params: {
     //       id: 224
@@ -125,17 +129,17 @@ describe('Delete Transaction', () => {
     //     expect(data.json.args[0][0].success).to.be.true
     //     expect(data.status.args[0][0]).equal(200)
     //     expect(data.json.args[0][0].message).equal('history has been deleted!')
+    //     done()
     //   })
     //   .catch((err) => {
-    //     console.log(err)
+    //     done(err)
     //   })
     // })
-
 })
 
 
 describe('Create Transaction', () => {
-  it('address must be filled', () => {
+  it('address must be filled', (done) => {
     let req = {
       authUser: {
         id: 2
@@ -153,13 +157,14 @@ describe('Create Transaction', () => {
     expect(res.status.args[0][0]).equal(400)
     expect(res.json.args[0][0].success).to.be.false
     expect(res.json.args[0][0].message).equal('address must be filled')
+    done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 
-  it('user not found', () => {
+  it('user not found', (done) => {
     let req = {
       authUser: {
         id: 10
@@ -177,13 +182,14 @@ describe('Create Transaction', () => {
       expect(res.status.args[0][0]).equal(404)
     expect(res.json.args[0][0].success).to.be.false
     expect(res.json.args[0][0].message).equal('user not found!')
+    done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 
-  it('product not found', () => {
+  it('product not found', (done) => {
     let req = {
       authUser: {
         id: 3
@@ -201,13 +207,14 @@ describe('Create Transaction', () => {
     expect(res.status.args[0][0]).equal(404)
     expect(res.json.args[0][0].success).to.be.false
     expect(res.json.args[0][0].message).equal('id product not found!')
+    done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 
-  it('transaction successfully created', () => {
+  it('transaction successfully created', (done) => {
     let req = {
       authUser: {
         id: 3
@@ -225,10 +232,10 @@ describe('Create Transaction', () => {
     expect(res.status.args[0][0]).equal(200)
     expect(res.json.args[0][0].success).to.be.true
     expect(res.json.args[0][0].message).equal('transaction successfully created')
-
+    done()
     })
     .catch((err) => {
-      console.log(err)
+      done(err)
     })
   })
 })

@@ -21,10 +21,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.json.args[0][0].message).equal('List variants')
       expect(data.status.args[0][0]).equal(200)
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('check admin', (done) => {
@@ -32,10 +32,10 @@ describe('Variants', () => {
     const res = mockingResponse()
     getUserRoleAsync(req,res).then((data) => {
       expect(data[0].role).equal('Admin')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('check General', (done) => {
@@ -43,10 +43,10 @@ describe('Variants', () => {
     const res = mockingResponse()
     getUserRoleAsync(req,res).then((data) => {
       expect(data[0].role).equal('General')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   // it ('create variants', (done) => {
@@ -64,10 +64,10 @@ describe('Variants', () => {
   //     expect(data.json.args[0][0].success).to.be.true
   //     expect(data.status.args[0][0]).equal(200)
   //     expect(data.json.args[0][0].message).equal('variant added successfully')
+  //     done()
   //   }).catch((err) => {
-  //     console.log(err)
+  //     done(err)
   //   })
-  //   done()
   // })
 
   it ('dont have permission (CREATE)', (done) => {
@@ -85,10 +85,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('You dont have any permission!')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('dont have permission (PATCH)', (done) => {
@@ -108,10 +108,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('You dont have any permission!')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('Just need one column to update (PATCH)', (done) => {
@@ -132,10 +132,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('System just need one column')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('variants updated successfully (PATCH)', (done) => {
@@ -155,10 +155,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.status.args[0][0]).equal(200)
       expect(data.json.args[0][0].message).equal('variants updated successfully')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('variant not found (PATCH)', (done) => {
@@ -178,10 +178,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('variant not found')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('dont have permission (PUT)', (done) => {
@@ -201,10 +201,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('You dont have any permission!')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('variant not found (PUT)', (done) => {
@@ -224,10 +224,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('variant not found')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('variants updated successfully (PUT)', (done) => {
@@ -247,10 +247,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.true
       expect(data.status.args[0][0]).equal(200)
       expect(data.json.args[0][0].message).equal('variant successfully updated')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('dont have permission (DELETE)', (done) => {
@@ -267,10 +267,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('You dont have any permission!')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   it ('variant not found (DELETE)', (done) => {
@@ -287,10 +287,10 @@ describe('Variants', () => {
       expect(data.json.args[0][0].success).to.be.false
       expect(data.status.args[0][0]).equal(400)
       expect(data.json.args[0][0].message).equal('variant not found')
+      done()
     }).catch((err) => {
-      console.log(err)
+      done(err)
     })
-    done()
   })
 
   // it ('variants has been deleted! (DELETE)', (done) => {
@@ -307,9 +307,9 @@ describe('Variants', () => {
   //     expect(data.json.args[0][0].message).equal('variants has been deleted!')
   //     expect(data.json.args[0][0].success).to.be.true
   //     expect(data.status.args[0][0]).equal(200)
+  //     done()
   //   }).catch((err) => {
-  //     console.log(err)
+  //     done(err)
   //   })
-  //   done()
   // })
 })

@@ -339,7 +339,7 @@ exports.getProductDetails = (req, res) => {
           price: product.end_price
         })
       })
-      return standardResponse(res, 'Detail product', data)
+      return standardResponse(res, 'Detail product', data, 200)
     }
   })
 }

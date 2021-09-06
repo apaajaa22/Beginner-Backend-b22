@@ -14,7 +14,28 @@ const mockingResponse = () => {
 
 describe('Get transaction by user login', () => {
 
-  it('have history transaction', (done) => {
+  it('get history (supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=reza@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .get('/private/transactions')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.success).to.be.true
+        expect(res.body.message).equal('History Transaction')
+        done()
+      })
+    })
+  })
+
+  it('get history transaction', (done) => {
     let req = {
       authUser: {
         id: 3
@@ -29,6 +50,27 @@ describe('Get transaction by user login', () => {
       done()
     }).catch((err) => {
       done(err)
+    })
+  })
+
+  it('History user not found (supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=user9@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .get('/private/transactions')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .end((err, res) => {
+        expect(res.body.success).to.be.false
+        expect(res.body.message).equal('History not found')
+        expect(res.status).equal(404)
+        done()
+      })
     })
   })
 

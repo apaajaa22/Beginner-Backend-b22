@@ -91,6 +91,27 @@ describe('Variants', () => {
     })
   })
 
+  it('dont have permission (CREATE)(supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=rafi@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .post('/variants')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .end((err, res) => {
+        expect(res.body.success).to.be.false
+        expect(res.status).equal(400)
+        expect(res.body.message).equal('You dont have any permission!')
+        done()
+      })
+    })
+  })
+
   it ('dont have permission (PATCH)', (done) => {
     let req = {
       authUser: {
@@ -161,6 +182,27 @@ describe('Variants', () => {
     })
   })
 
+  it('variant not found (PATCH)(supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=reza@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .patch('/variants/:10')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .end((err, res) => {
+        expect(res.body.success).to.be.false
+        expect(res.status).equal(400)
+        expect(res.body.message).equal('variant not found')
+        done()
+      })
+    })
+  })
+
   it ('variant not found (PATCH)', (done) => {
     let req = {
       authUser: {
@@ -181,6 +223,27 @@ describe('Variants', () => {
       done()
     }).catch((err) => {
       done(err)
+    })
+  })
+
+  it('dont have permission (PUT)(supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=rafi@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .put('/variants/:10')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .end((err, res) => {
+        expect(res.body.success).to.be.false
+        expect(res.status).equal(400)
+        expect(res.body.message).equal('You dont have any permission!')
+        done()
+      })
     })
   })
 

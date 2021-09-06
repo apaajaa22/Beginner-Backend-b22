@@ -94,6 +94,29 @@ describe('Get transaction by user login', () => {
 })
 
 describe('Get Transaction Detail', () => {
+
+  it('get history detail successfully(supertest)', (done) => {
+    supertest(APP_URL)
+    .post('/auth/login')
+    .send(`email=reza@email.com&password=123456`)
+    .expect(200)
+    .end((err, res) => {
+      expect(res.body.success).to.be.true
+      expect(res.body.message).equal('Login success')
+      expect(res.body.results.token).to.be.a('string')
+      supertest(APP_URL)
+      .get('/private/transactions/31')
+      .set('Authorization', `Bearer ${res.body.results.token}`)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.success).to.be.true
+        expect(res.status).equal(200)
+        expect(res.body.message).equal('History Detail')
+        done()
+      })
+    })
+  })
+
   it('Get history detail successfully', (done) => {
     let req = {
       authUser: {
